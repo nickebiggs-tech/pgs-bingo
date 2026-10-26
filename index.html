@@ -1,0 +1,149 @@
+<title>Pharmacy Groups Symposium Bingo 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Nunito:wght@500;700&display=swap">
+<style>
+/* Layout: navy conference header fading to pale blue, speaker card, 2x5 bingo grid, scoreboard, full-screen reveal. */
+:root{
+  --navy:#25527f; --navy-deep:#1d3f63; --pale:#dceaf3; --bg:#dceaf3; --card:#ffffff; --fg:#1d3f63; --muted:#5b7390;
+  --gold:#d6a632; --tick:#1f7a4d; --line:#bfd3e3; --on-bg:#25527f;
+  --display:"Outfit","Segoe UI",system-ui,sans-serif; --body:"Nunito","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#152a42; --card:#1f3d5e; --fg:#e8f0f7; --muted:#a9bdd2; --line:#2f5276; --pale:#152a42; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#152a42; --card:#1f3d5e; --fg:#e8f0f7; --muted:#a9bdd2; --line:#2f5276; --pale:#152a42; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);margin:0;min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+.hero{background:linear-gradient(180deg,var(--navy) 0%,var(--navy) 55%,var(--pale) 100%);color:#fff;text-align:center;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+.hero .in{max-width:520px;margin:0 auto}
+.event{font-family:var(--display);font-weight:800;font-size:clamp(22px,6.4vw,30px);letter-spacing:.02em;line-height:1.05;margin:0;text-transform:uppercase}
+.event small{display:block;font-weight:700;letter-spacing:.32em;font-size:.78em;margin-top:4px}
+.event small i{font-style:normal;color:var(--gold)}
+.bingo-word{font-family:var(--display);font-weight:800;font-size:clamp(54px,19vw,96px);line-height:.9;margin:14px 0 6px;letter-spacing:-.03em;color:var(--gold);text-wrap:balance}
+.yr{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.18em;margin:0}
+.sponsor{margin-top:22px;font-size:13px;opacity:.9}
+.sponsor b{display:block;font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:.02em;margin-top:2px}
+
+.wrap{max-width:520px;margin:-32px auto 0;display:flex;flex-direction:column;gap:14px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.speaker{background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:0 8px 24px rgba(29,63,99,.18);display:flex;gap:14px;align-items:center}
+.speaker .av{flex:0 0 52px;width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;font-family:var(--display);font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center}
+.speaker .who{min-width:0}
+.speaker .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.speaker h2{font-family:var(--display);font-weight:800;font-size:22px;margin:2px 0 2px;line-height:1.1}
+.speaker p{margin:0;font-size:13px;color:var(--muted);line-height:1.35}
+
+.score{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 14px;gap:12px}
+.score b{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.bar{flex:1;height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+.score span{font-size:13px;color:var(--muted);font-weight:700}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sq{position:relative;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 12px 14px 42px;
+  min-height:84px;display:flex;align-items:center;text-align:left;font:inherit;font-weight:700;font-size:15px;line-height:1.25;color:var(--fg);cursor:pointer;
+  transition:transform .12s,background .2s,border-color .2s;min-width:0}
+.sq:active{transform:scale(.96)}
+.sq:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.sq::before{content:"";position:absolute;left:12px;top:50%;translate:0 -50%;width:20px;height:20px;border:2px solid var(--muted);border-radius:6px}
+.sq.on{background:var(--on-bg);border-color:var(--on-bg);color:#fff;text-decoration:line-through;text-decoration-thickness:2px}
+.sq.on::before{content:"✓";border-color:var(--gold);background:var(--gold);color:var(--navy-deep);font-size:15px;line-height:17px;text-align:center;font-weight:900}
+
+.actions{display:flex;justify-content:center}
+button.ghost{background:none;border:2px solid var(--line);border-radius:99px;padding:8px 16px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
+button.ghost:focus-visible{outline:3px solid var(--gold)}
+.rules{font-size:13px;color:var(--muted);text-align:center;line-height:1.5;margin:0}
+.fine{font-size:11px;color:var(--muted);text-align:center;margin:0;line-height:1.4}
+
+.reveal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:var(--navy-deep);z-index:20;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.reveal.show{display:flex}
+.reveal div{text-align:center;color:#fff}
+.reveal h2{font-family:var(--display);font-weight:800;font-size:clamp(64px,24vw,140px);line-height:.9;margin:0;letter-spacing:-.04em;color:var(--gold);animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+.reveal p{font-size:18px;font-weight:700;margin:14px 0 24px;text-wrap:balance}
+.reveal button{background:var(--gold);color:var(--navy-deep);border:0;border-radius:99px;padding:12px 24px;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+@keyframes pop{from{transform:scale(.3) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.reveal h2{animation:none}.sq{transition:none}}
+</style>
+
+<div class="hero"><div class="in">
+  <h1 class="event">Pharmacy Groups<small>Symp<i>o</i>sium</small></h1>
+  <div class="bingo-word">BINGO</div>
+  <p class="yr">2026</p>
+  <p class="sponsor">Bingo card proudly brought to you by<b>MIMS Centenary Edition</b></p>
+</div></div>
+
+<div class="wrap">
+  <div class="speaker">
+    <div class="av">CO</div>
+    <div class="who">
+      <div class="k">Now speaking. Listen closely.</div>
+      <h2>Chris Owen</h2>
+      <p>Queensland Branch President, The Pharmacy Guild of Australia. Every phrase he lands is a square for you.</p>
+    </div>
+  </div>
+
+  <div class="score"><b id="count">0/10</b><div class="bar"><i id="bar"></i></div><span id="status">Stay alert</span></div>
+
+  <div class="grid" id="grid">
+    <button class="sq" type="button" id="sq0" aria-pressed="false">Let's not boil the ocean</button>
+    <button class="sq" type="button" id="sq1" aria-pressed="false">Let's put a pin in it</button>
+    <button class="sq" type="button" id="sq2" aria-pressed="false">Let's test the temperature</button>
+    <button class="sq" type="button" id="sq3" aria-pressed="false">Let's circle back on that</button>
+    <button class="sq" type="button" id="sq4" aria-pressed="false">That idea needs to be buttoned up</button>
+    <button class="sq" type="button" id="sq5" aria-pressed="false">Low-hanging fruit</button>
+    <button class="sq" type="button" id="sq6" aria-pressed="false">Move the needle</button>
+    <button class="sq" type="button" id="sq7" aria-pressed="false">Let's take this offline</button>
+    <button class="sq" type="button" id="sq8" aria-pressed="false">Leverage our synergies</button>
+    <button class="sq" type="button" id="sq9" aria-pressed="false">At the end of the day</button>
+  </div>
+
+  <div class="actions"><button class="ghost" id="reset">Clear card</button></div>
+  <p class="rules">A full row across is a <b>line</b>. Call it quietly. All ten is a <b>full house</b>: stand up and say "let's take this offline".</p>
+  <p class="fine">Unofficial table game. Not endorsed by the Guild, the Symposium or Chris, who has no idea this exists.</p>
+</div>
+
+<div class="reveal" id="bingo" role="dialog" aria-live="assertive"><div><h2 id="btitle">BINGO</h2><p id="bmsg"></p><button id="close">Back to Chris</button></div></div>
+
+<script>
+(function(){
+  var lines=[
+    "Let's not boil the ocean",
+    "Let's put a pin in it",
+    "Let's test the temperature",
+    "Let's circle back on that",
+    "That idea needs to be buttoned up",
+    "Low-hanging fruit",
+    "Move the needle",
+    "Let's take this offline",
+    "Leverage our synergies",
+    "At the end of the day"
+  ];
+  var grid=document.getElementById('grid'),count=document.getElementById('count'),bar=document.getElementById('bar'),status=document.getElementById('status');
+  var state=[];try{state=JSON.parse(localStorage.getItem('pgs-bingo-state')||'[]')}catch(e){state=[]}
+  if(state.length!==lines.length)state=lines.map(function(){return false});
+  var announced={};try{announced=JSON.parse(localStorage.getItem('pgs-bingo-ann')||'{}')}catch(e){announced={}}
+  var quips=["Chris is on form tonight.","Nod thoughtfully. Say nothing.","Someone at your table just earned their MBA.","Circle back to the bar afterwards.","That one was buttoned up."];
+
+  lines.forEach(function(t,i){
+    document.getElementById('sq'+i).addEventListener('click',function(){state[i]=!state[i];render();check()});
+  });
+  function save(){try{localStorage.setItem('pgs-bingo-state',JSON.stringify(state));localStorage.setItem('pgs-bingo-ann',JSON.stringify(announced))}catch(e){}}
+  function render(){
+    var n=0;state.forEach(function(s,i){var b=document.getElementById('sq'+i);b.classList.toggle('on',s);b.setAttribute('aria-pressed',s);if(s)n++});
+    count.textContent=n+'/10';bar.style.width=(n*10)+'%';
+    status.textContent=n===0?'Stay alert':n<4?'Warming up':n<7?'Getting spicy':n<10?'So close':'Full house';
+    save();
+  }
+  function check(){
+    if(state.every(Boolean)&&!announced.full){announced.full=true;save();show('FULL HOUSE','Every single one. Stand up and say "let\'s take this offline".');return}
+    for(var r=0;r<5;r++){if(state[r*2]&&state[r*2+1]&&!announced['r'+r]){announced['r'+r]=true;save();show('BINGO','Row '+(r+1)+' complete. '+quips[r]);return}}
+  }
+  function show(t,m){document.getElementById('btitle').textContent=t;document.getElementById('bmsg').textContent=m;document.getElementById('bingo').classList.add('show')}
+  document.getElementById('close').addEventListener('click',function(){document.getElementById('bingo').classList.remove('show')});
+  document.getElementById('reset').addEventListener('click',function(){state=lines.map(function(){return false});announced={};render()});
+  render();
+})();
+</script>
