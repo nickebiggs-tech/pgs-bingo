@@ -1,5 +1,10 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#25527f">
 <title>Pharmacy Groups Symposium Bingo 2026</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Nunito:wght@500;700&display=swap">
 <style>
 /* Layout: navy conference header fading to pale blue, speaker card, 2x5 bingo grid, scoreboard, full-screen reveal. */
@@ -13,7 +18,7 @@
 :root[data-theme="dark"]{ --bg:#152a42; --card:#1f3d5e; --fg:#e8f0f7; --muted:#a9bdd2; --line:#2f5276; --pale:#152a42; color-scheme:dark }
 
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);margin:0;min-height:100%}
+html{height:100%}body{background:var(--bg);color:var(--fg);font-family:var(--body);margin:0;min-height:100%;font-size:16px;-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
 .hero{background:linear-gradient(180deg,var(--navy) 0%,var(--navy) 55%,var(--pale) 100%);color:#fff;text-align:center;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
@@ -32,8 +37,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .speaker .av{flex:0 0 52px;width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;font-family:var(--display);font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center}
 .speaker .who{min-width:0}
 .speaker .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
-.speaker h2{font-family:var(--display);font-weight:800;font-size:22px;margin:2px 0 2px;line-height:1.1}
-.speaker p{margin:0;font-size:13px;color:var(--muted);line-height:1.35}
+.speaker h2{font-family:var(--display);font-weight:800;font-size:24px;margin:2px 0 2px;line-height:1.1}
+.speaker p{margin:0;font-size:14px;color:var(--muted);line-height:1.35}
 
 .score{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 14px;gap:12px}
 .score b{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
@@ -42,8 +47,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .score span{font-size:13px;color:var(--muted);font-weight:700}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sq{position:relative;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 12px 14px 42px;
-  min-height:84px;display:flex;align-items:center;text-align:left;font:inherit;font-weight:700;font-size:15px;line-height:1.25;color:var(--fg);cursor:pointer;
+.sq{position:relative;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 12px 14px 46px;
+  min-height:96px;display:flex;align-items:center;text-align:left;font:inherit;font-weight:700;font-size:17px;line-height:1.25;color:var(--fg);cursor:pointer;
   transition:transform .12s,background .2s,border-color .2s;min-width:0}
 .sq:active{transform:scale(.96)}
 .sq:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
@@ -52,9 +57,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .sq.on::before{content:"✓";border-color:var(--gold);background:var(--gold);color:var(--navy-deep);font-size:15px;line-height:17px;text-align:center;font-weight:900}
 
 .actions{display:flex;justify-content:center}
-button.ghost{background:none;border:2px solid var(--line);border-radius:99px;padding:8px 16px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
+button.ghost{background:none;border:2px solid var(--line);border-radius:99px;padding:10px 20px;font:inherit;font-size:16px;font-weight:700;color:var(--muted);cursor:pointer}
 button.ghost:focus-visible{outline:3px solid var(--gold)}
-.rules{font-size:13px;color:var(--muted);text-align:center;line-height:1.5;margin:0}
+.rules{font-size:14px;color:var(--muted);text-align:center;line-height:1.5;margin:0}
 .fine{font-size:11px;color:var(--muted);text-align:center;margin:0;line-height:1.4}
 
 .reveal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:var(--navy-deep);z-index:20;
@@ -67,6 +72,8 @@ button.ghost:focus-visible{outline:3px solid var(--gold)}
 @keyframes pop{from{transform:scale(.3) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.reveal h2{animation:none}.sq{transition:none}}
 </style>
+</head>
+<body>
 
 <div class="hero"><div class="in">
   <h1 class="event">Pharmacy Groups<small>Symp<i>o</i>sium</small></h1>
@@ -147,3 +154,6 @@ button.ghost:focus-visible{outline:3px solid var(--gold)}
   render();
 })();
 </script>
+
+</body>
+</html>
