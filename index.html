@@ -46,6 +46,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
 .score span{font-size:13px;color:var(--muted);font-weight:700}
 
+.total{background:var(--navy-deep);color:#fff;border-radius:16px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+.total .pts{font-family:var(--display);font-weight:800;font-size:40px;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums;grid-row:span 2}
+.total .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;font-weight:700}
+.total .rank{font-family:var(--display);font-weight:800;font-size:19px;line-height:1.15}
+.total .why{grid-column:1/-1;font-size:13px;opacity:.85;line-height:1.4;margin:4px 0 0}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .sq{position:relative;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 12px 14px 46px;
   min-height:96px;display:flex;align-items:center;text-align:left;font:inherit;font-weight:700;font-size:17px;line-height:1.25;color:var(--fg);cursor:pointer;
@@ -108,6 +113,8 @@ button.ghost:focus-visible{outline:3px solid var(--gold)}
   </div>
 
   <div class="score"><b id="count">0/10</b><div class="bar"><i id="bar"></i></div><span id="status">Stay alert</span></div>
+
+  <div class="total"><div class="pts" id="pts">0</div><div class="k">Jargon score</div><div class="rank" id="rank">Civilian</div><p class="why" id="why">10 points per square, 5 per wildcard. Chris is loading.</p></div>
 
   <div class="grid" id="grid">
     <button class="sq" type="button" id="sq0" aria-pressed="false">Let's not boil the ocean</button>
@@ -194,6 +201,25 @@ button.ghost:focus-visible{outline:3px solid var(--gold)}
     inp.value='';saveWild();renderWild();
   });
   document.getElementById('reset').addEventListener('click',function(){wild=wildStart.map(function(t){return {t:t,on:false}});saveWild();renderWild()});
+  var ranks=[
+    [0,'Civilian','Hasn\'t heard a single buzzword. Either you arrived late or Chris is off his game.'],
+    [10,'Intern','One phrase. You nodded. You didn\'t know why.'],
+    [25,'Associate','Starting to speak fluent meeting. Your family won\'t understand you by Friday.'],
+    [45,'Middle Manager','You have "synergy" in your email signature now. Nobody asked.'],
+    [65,'Head of Strategy','You could run this session yourself and nobody would notice the difference.'],
+    [85,'Consultant (Big 4)','Billing by the buzzword. This deck has paid for your lunch.'],
+    [105,'Chief Transformation Officer','You have transformed nothing but you have aligned everything.'],
+    [125,'LinkedIn Thought Leader','Agree? Post this. You are now unemployable in a normal conversation.'],
+    [150,'Chris Owen','You have become him. Let\'s take this offline and talk about what happened to you.']
+  ];
+  function score(){
+    var sq=state.filter(Boolean).length,w=wild.filter(function(x){return x.on}).length,t=sq*10+w*5,r=ranks[0];
+    ranks.forEach(function(x){if(t>=x[0])r=x});
+    document.getElementById('pts').textContent=t;document.getElementById('rank').textContent=r[1];
+    var next=ranks.filter(function(x){return x[0]>t})[0];
+    document.getElementById('why').textContent=r[2]+(next?' '+(next[0]-t)+' points to '+next[1]+'.':'');
+  }
+  var _r=render,_rw=renderWild;render=function(){_r();score()};renderWild=function(){_rw();score()};
   renderWild();
   render();
 })();
