@@ -56,6 +56,21 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .sq.on{background:var(--on-bg);border-color:var(--on-bg);color:#fff;text-decoration:line-through;text-decoration-thickness:2px}
 .sq.on::before{content:"✓";border-color:var(--gold);background:var(--gold);color:var(--navy-deep);font-size:15px;line-height:17px;text-align:center;font-weight:900}
 
+.wild{display:flex;flex-direction:column;gap:10px}
+.wild h3{font-family:var(--display);font-weight:800;font-size:18px;margin:6px 0 0;display:flex;align-items:center;gap:8px}
+.wild h3 small{font-family:var(--body);font-weight:700;font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.wild .hint{font-size:13px;color:var(--muted);margin:0;line-height:1.4}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:99px;padding:9px 14px 9px 34px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;max-width:100%;text-align:left}
+.chip::before{content:"";position:absolute;left:10px;top:50%;translate:0 -50%;width:16px;height:16px;border:2px solid var(--muted);border-radius:50%}
+.chip.on{background:var(--gold);border-color:var(--gold);color:var(--navy-deep);text-decoration:line-through}
+.chip.on::before{content:"✓";border-color:var(--navy-deep);background:var(--navy-deep);color:var(--gold);font-size:11px;line-height:12px;text-align:center;font-weight:900}
+.chip:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.addrow{display:flex;gap:8px}
+.addrow input{flex:1;min-width:0;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:11px 12px;font:inherit;font-size:16px}
+.addrow input:focus{outline:3px solid var(--gold);outline-offset:1px}
+.addrow button{background:var(--navy);color:#fff;border:0;border-radius:12px;padding:0 16px;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+.addrow button:focus-visible{outline:3px solid var(--gold)}
 .actions{display:flex;justify-content:center}
 button.ghost{background:none;border:2px solid var(--line);border-radius:99px;padding:10px 20px;font:inherit;font-size:16px;font-weight:700;color:var(--muted);cursor:pointer}
 button.ghost:focus-visible{outline:3px solid var(--gold)}
@@ -107,6 +122,13 @@ button.ghost:focus-visible{outline:3px solid var(--gold)}
     <button class="sq" type="button" id="sq9" aria-pressed="false">At the end of the day</button>
   </div>
 
+  <div class="wild">
+    <h3>Wildcards <small>bonus round</small></h3>
+    <p class="hint">Not on the card but you heard it. Tick it, or add your own. Wildcards are bragging rights, not bingo.</p>
+    <div class="chips" id="chips"></div>
+    <form class="addrow" id="addform"><input type="text" id="newwild" placeholder="He just said what?" maxlength="60" autocomplete="off"><button type="submit">Add</button></form>
+  </div>
+
   <div class="actions"><button class="ghost" id="reset">Clear card</button></div>
   <p class="rules">A full row across is a <b>line</b>. Call it quietly. All ten is a <b>full house</b>: stand up and say "let's take this offline".</p>
   <p class="fine">Unofficial table game. Not endorsed by the Guild, the Symposium or Chris, who has no idea this exists.</p>
@@ -151,6 +173,28 @@ button.ghost:focus-visible{outline:3px solid var(--gold)}
   function show(t,m){document.getElementById('btitle').textContent=t;document.getElementById('bmsg').textContent=m;document.getElementById('bingo').classList.add('show')}
   document.getElementById('close').addEventListener('click',function(){document.getElementById('bingo').classList.remove('show')});
   document.getElementById('reset').addEventListener('click',function(){state=lines.map(function(){return false});announced={};render()});
+  // Wildcards: starter set plus anything the table adds. Stored per phone like the card.
+  var wildStart=["Compare the pair","Apples with apples","Single source of truth","Shift the dial","Big rocks first","Unpack that","Double-click on that","Run it up the flagpole","Not my first rodeo","Let's park that"];
+  var wild=null;try{wild=JSON.parse(localStorage.getItem('pgs-bingo-wild')||'null')}catch(e){}
+  if(!wild||!wild.length)wild=wildStart.map(function(t){return {t:t,on:false}});
+  var chips=document.getElementById('chips');
+  function saveWild(){try{localStorage.setItem('pgs-bingo-wild',JSON.stringify(wild))}catch(e){}}
+  function renderWild(){
+    chips.innerHTML='';
+    wild.forEach(function(w,i){
+      var c=document.createElement('button');c.type='button';c.className='chip'+(w.on?' on':'');c.textContent=w.t;c.setAttribute('aria-pressed',w.on);
+      c.addEventListener('click',function(){w.on=!w.on;saveWild();renderWild()});chips.appendChild(c);
+    });
+    var n=wild.filter(function(w){return w.on}).length;
+    var h=document.querySelector('.wild h3 small');h.textContent=n?n+' heard':'bonus round';
+  }
+  document.getElementById('addform').addEventListener('submit',function(e){
+    e.preventDefault();var inp=document.getElementById('newwild');var t=inp.value.trim();if(!t)return;
+    if(!wild.some(function(w){return w.t.toLowerCase()===t.toLowerCase()}))wild.push({t:t,on:true});
+    inp.value='';saveWild();renderWild();
+  });
+  document.getElementById('reset').addEventListener('click',function(){wild=wildStart.map(function(t){return {t:t,on:false}});saveWild();renderWild()});
+  renderWild();
   render();
 })();
 </script>
